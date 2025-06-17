@@ -10,7 +10,7 @@ class User extends Model implements JWTSubject, AuthenticatableContract
 {
     use Authenticatable;
 
-    protected $fillable = ['name', 'email', 'password'];
+    protected $fillable = ['name', 'email', 'password', 'role'];
     protected $hidden = ['password'];
 
     // Retorna o identificador do usuário para o token
