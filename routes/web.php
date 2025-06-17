@@ -34,4 +34,12 @@ $router->group(['prefix' => 'auth'], function () use ($router) {
 $router->group(['middleware' => 'auth'], function () use ($router) {    
     $router->get('auth/me', 'AuthController@me');
     $router->post('auth/logout', 'AuthController@logout');
+    
+    $router->get('available-slots', 'SchedulingController@availableSlots');
+
+    $router->group(['prefix' => 'admin'], function () use ($router) {
+        $router->get('scheduling/today', 'AdminController@todayScheduling');
+        $router->get('scheduling/future', 'AdminController@futureScheduling');
+        $router->get('scheduling/date/{date}', 'AdminController@SchedulingByDate');
+    });
 });
