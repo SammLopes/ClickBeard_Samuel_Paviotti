@@ -34,6 +34,13 @@ $router->group(['prefix' => 'auth'], function () use ($router) {
 $router->group(['middleware' => 'auth'], function () use ($router) {    
     $router->get('auth/me', 'AuthController@me');
     $router->post('auth/logout', 'AuthController@logout');
+
+    $router->group(['prefix' => 'scheduling'], function () use ($router) {
+        $router->get('/', 'SchedulingController@index');           
+        $router->post('/', 'SchedulingController@store');          
+        $router->get('{id}', 'SchedulingController@show');         
+        $router->put('{id}', 'SchedulingController@update');       
+    });
     
     $router->get('available-slots', 'SchedulingController@availableSlots');
 
