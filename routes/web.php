@@ -21,6 +21,11 @@ $router->get('/routes', function() use ($router) {
     return response()->json($router->getRoutes());
 });
 
+$router->get('barbers', 'BarberController@index');
+$router->get('barbers/{id}', 'BarberController@show');
+$router->get('services', 'ServiceController@index');
+$router->get('services/{id}', 'ServiceController@show');
+
 $router->group(['prefix' => 'auth'], function () use ($router) {
     $router->post('register', 'AuthController@register');
     $router->post('login', 'AuthController@login');
