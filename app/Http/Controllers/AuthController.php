@@ -7,7 +7,7 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 
 class AuthController extends BaseController {
 
-    public function register(Request $request)
+    public function register(Request $request)  
     {
         $this->validate($request, [
             'name' => 'required|string|max:255',
@@ -23,7 +23,7 @@ class AuthController extends BaseController {
         ]);
     
         $token = auth()->login($user);
-    
+   
         return response()->json([
             'message' => 'Usuário cadastrado com sucesso',
             'user' => [
@@ -37,7 +37,7 @@ class AuthController extends BaseController {
 
     }
 
-    public function login()
+    public function login(Request $request)
     {
         
         $this->validate($request, [

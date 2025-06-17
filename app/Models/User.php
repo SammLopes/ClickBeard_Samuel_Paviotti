@@ -19,7 +19,6 @@ class User extends Model implements JWTSubject, AuthenticatableContract
         return $this->getKey();
     }
 
-    // Define claims adicionais (vazio neste caso)
     public function getJWTCustomClaims()
     {
         return [];
