@@ -6,6 +6,9 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Database\Seeders\UserSeeder;
 use Database\Seeders\BarberSeeder;
+use Database\Seeders\SpecialtySeeder;
+use Database\Seeders\ServiceSeeder;
+use Database\Seeders\BarberSpecialtySeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,7 +21,10 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
-            BarberSeeder::class
+            SpecialtySeeder::class,
+            BarberSeeder::class,
+            ServiceSeeder::class,
+            BarberSpecialtySeeder::class
         ]);
     }
 }

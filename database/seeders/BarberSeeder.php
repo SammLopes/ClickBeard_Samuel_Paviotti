@@ -20,19 +20,22 @@ class BarberSeeder extends Seeder
                 'name' => 'João Silva',
                 'email' => 'joao@barbearia.com',
                 'phone' => '11999999999',
-                'specialties' => 'Corte masculino, Barba, Bigode',
+                'age' => 28, 
+                'hire_date' => '2023-01-15' 
             ],
             [
                 'name' => 'Pedro Santos',
                 'email' => 'pedro@barbearia.com',
                 'phone' => '11888888888',
-                'specialties' => 'Corte infantil, Corte feminino, Escova',
+                'age' => 32, 
+                'hire_date' => '2022-06-10' 
             ],
             [
                 'name' => 'Carlos Oliveira',
                 'email' => 'carlos@barbearia.com',
                 'phone' => '11777777777',
-                'specialties' => 'Corte degradê, Barba, Sobrancelha',
+                'age' => 35, 
+                'hire_date' => '2021-03-20' 
             ],
         ];
 
