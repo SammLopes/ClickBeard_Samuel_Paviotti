@@ -37,6 +37,20 @@
 
 - Cria o JWT secret
 ##comando para crair o hash
+- pode ser criado de duas formas usando openssl ou php
+- OpenSSL, presente no terminal do Git bash
+```bash
+    openssl rand -hex 32
+```
+- Com php dessa forma 
+```bash
+    php -r "echo bin2hex(random_bytes(32)) . PHP_EOL;"
+```
+- Ambos os comandos geran um hash como esse: 
+```bash
+ec6f775c0e1270947013c5d2a912b5df062aa35d4d3e681b176fb81976579750
+```
+- Basta pegar esse hash e colocar no JWT_SECRET dentro do .env
 
 - Use o servidor embutido do php para executar a aplicação
 ```bash
