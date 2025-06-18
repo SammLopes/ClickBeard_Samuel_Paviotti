@@ -10,7 +10,7 @@ use App\Models\Service;
 use App\Models\User;
 use Carbon\Carbon;
 
-class SchefulingController extends BaseController{
+class SchedulingController extends BaseController{
 
      public function index()
     {
@@ -55,7 +55,7 @@ class SchefulingController extends BaseController{
             ], 422);
         }
 
-        $schedulingCreated = Sheduling::create([
+        $schedulingCreated = Scheduling::create([
             'user_id' => $user->id,
             'barber_id' => $request->barber_id,
             'service_id' => $request->service_id,
@@ -73,16 +73,16 @@ class SchefulingController extends BaseController{
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         $user = auth()->user();
         
-        $sheduling = Sheduling::with(['barber', 'service'])
+        $scheduling = Scheduling::with(['barber', 'service'])
             ->where('id', $id)
             ->where('user_id', $user->id)
             ->firstOrFail();
 
-        return response()->json($sheduling);
+        return response()->json($scheduling);
     }
 
     public function update(Request $request,  string $id)

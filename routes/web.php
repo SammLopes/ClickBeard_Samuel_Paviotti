@@ -47,6 +47,6 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->group(['prefix' => 'admin'], function () use ($router) {
         $router->get('scheduling/today', 'AdminController@todayScheduling');
         $router->get('scheduling/future', 'AdminController@futureScheduling');
-        $router->get('scheduling/date/{date}', 'AdminController@SchedulingByDate');
+        $router->get('scheduling/date/{date}', 'AdminController@schedulingByDate');
     });
 });
