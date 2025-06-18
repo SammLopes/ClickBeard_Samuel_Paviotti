@@ -13,9 +13,7 @@
 |
 */
 
-$router->get('/', function () {
-    return $router->app->version();
-});
+$router->get('/', fn() => $router->app->version());
 
 $router->get('/routes', function() use ($router) {
     return response()->json($router->getRoutes());
@@ -23,8 +21,11 @@ $router->get('/routes', function() use ($router) {
 
 $router->get('barbers', 'BarberController@index');
 $router->get('barbers/{id}', 'BarberController@show');
+$router->get('barbers/specialty/{specialtyId}', 'BarberController@getBySpecialty');
+
 $router->get('services', 'ServiceController@index');
 $router->get('services/{id}', 'ServiceController@show');
+
 
 $router->group(['prefix' => 'auth'], function () use ($router) {
     $router->post('register', 'AuthController@register');
@@ -44,7 +45,14 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     
     $router->get('available-slots', 'SchedulingController@availableSlots');
 
-    $router->group(['prefix' => 'admin'], function () use ($router) {
+    $router->post('barbers', 'BarberController@store'); 
+    $router->put('barbers/{id}', 'BarberController@update');
+
+    $router->post('barbers/{id}/specialties', 'BarberController@addSpecialty');
+    $router->delete('barbers/{id}/specialties', 'BarberController@removeSpecialty');
+    
+    $router->group(['prefix' => 'admin', 'middelware'=>'admin'], function () use ($router) {
+
         $router->get('scheduling/today', 'AdminController@todayScheduling');
         $router->get('scheduling/future', 'AdminController@futureScheduling');
         $router->get('scheduling/date/{date}', 'AdminController@schedulingByDate');
