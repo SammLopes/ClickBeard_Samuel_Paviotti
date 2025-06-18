@@ -4,12 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use App\Model\User;
+use App\Model\Barber;
+use App\Model\Service;
 
 class Scheduling extends Model
 {
     protected $fillable = [
-        'user_id', 'barber_id', 'service_id', 
-        'scheduling_date', 'scheduling_time', 'status', 'notes'
+        'user_id', 
+        'barber_id', 
+        'service_id', 
+        'scheduling_date', 
+        'scheduling_time', 
+        'status', 
+        'notes'
     ];
 
     protected $casts = [
