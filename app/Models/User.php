@@ -19,6 +19,11 @@ class User extends Model implements JWTSubject, AuthenticatableContract
         return $this->getKey();
     }
 
+    public function isAdmin()
+    {
+        return $this->role === 'admin';  
+    }
+
     public function getJWTCustomClaims()
     {
         return [];
