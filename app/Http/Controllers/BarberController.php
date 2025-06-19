@@ -208,21 +208,22 @@ class BarberController extends BaseController
     {
         $specialty = Specialty::findOrFail($specialtyId);
         
-        $barbers = $specialty->barbers()
+        $barbersBySpecialty = $specialty->barbers()
             ->where('is_active', true)
             ->orderByPivot('experience_years', 'desc')
             ->get();
 
-        return response()->json([
-            'specialty' => $specialty->name,
-            'barbers' => $barbers->map(function($barber) {
+        $barber = $barbersBySpecialty->map(function($barber) {
                 return [
                     'id' => $barber->id,
                     'name' => $barber->name,
                     'experience_years' => $barber->pivot->experience_years,
                     'is_primary' => $barber->pivot->is_primary
                 ];
-            })
+        });    
+        return response()->json([
+            'specialty' => $specialty->name,
+            'barbers' => $barber 
         ]);
     }
 
