@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
-use App\Model\User;
-use App\Model\Barber;
-use App\Model\Service;
+use App\Models\User;
+use App\Models\Barber;
+use App\Models\Service;
 
 class Scheduling extends Model
 {

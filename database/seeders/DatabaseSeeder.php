@@ -9,6 +9,7 @@ use Database\Seeders\BarberSeeder;
 use Database\Seeders\SpecialtySeeder;
 use Database\Seeders\ServiceSeeder;
 use Database\Seeders\BarberSpecialtySeeder;
+use Database\Seeders\ScheduleSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,7 +25,8 @@ class DatabaseSeeder extends Seeder
             SpecialtySeeder::class,
             BarberSeeder::class,
             ServiceSeeder::class,
-            BarberSpecialtySeeder::class
+            BarberSpecialtySeeder::class,
+            ScheduleSeeder::class
         ]);
     }
 }
