@@ -54,7 +54,7 @@ CREATE TABLE services (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT,
-    specialty_id BIGINT UNSIGNED NULL
+    specialty_id BIGINT UNSIGNED NULL,
     price DECIMAL(8,2) NOT NULL,
     duration_minutes INT NOT NULL,
     is_active BOOLEAN DEFAULT TRUE,
@@ -75,6 +75,7 @@ CREATE TABLE scheduling (
     scheduling_time TIME NOT NULL,
     status ENUM('scheduled', 'confirmed', 'completed', 'cancelled') DEFAULT 'scheduled',
     notes TEXT,
+    
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     

@@ -34,7 +34,10 @@
 ```bash
     php artisan migrate --seed
 ```
-
+- Caso ja tenha usado pode recriar tudo e eceutar tudo denovo
+```bash
+    php artisan migrate:fresh --seed
+```
 - Cria o JWT secret
 ##comando para crair o hash
 - pode ser criado de duas formas usando openssl ou php
@@ -54,7 +57,7 @@ ec6f775c0e1270947013c5d2a912b5df062aa35d4d3e681b176fb81976579750
 
 - Use o servidor embutido do php para executar a aplicação
 ```bash
-    php -S localhost:8000 -t /public
+    php -S localhost:8000 -t ./public
 ```
 
 
