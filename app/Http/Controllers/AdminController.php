@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Scheduling;
+use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use Carbon\Carbon;
 
@@ -22,7 +23,7 @@ class AdminController extends BaseController
 
         $scheduling = Scheduling::with(['user', 'barber', 'service'])
             ->today()
-            ->orderBy('appointment_time')
+            ->orderBy('scheduling_time')
             ->get();
 
         return response()->json([
@@ -32,7 +33,7 @@ class AdminController extends BaseController
         ]);
     }
 
-    public function futuresScheduling() 
+    public function futureScheduling() 
     {
         $user = auth()->user();
         
@@ -42,8 +43,8 @@ class AdminController extends BaseController
 
         $scheduling = Scheduling::with(['user', 'barber', 'service'])
             ->future()
-            ->orderBy('appointment_date')
-            ->orderBy('appointment_time')
+            ->orderBy('scheduling_date')
+            ->orderBy('scheduling_time')
             ->get();
 
         return response()->json([
@@ -55,13 +56,14 @@ class AdminController extends BaseController
     // YYYY-MM-DD -> formato de data
     public function schedulingByDate($date) 
     {
+
         $user = auth()->user();
         
         if (!$user->isAdmin()) {
             return response()->json(['error' => 'Acesso negado'], 403);
         }
 
-        $scheduling = Scheduling::with(['user', 'barber', 'service'])
+        $schedulings = Scheduling::with(['user', 'barber', 'service'])
             ->whereDate('scheduling_date', $date)
             ->orderBy('scheduling_time')
             ->get();
@@ -73,7 +75,7 @@ class AdminController extends BaseController
         ]);
     }
 
-    public function confirmScheduling(Request $request, $id)
+    public function confirmScheduling($id)
     {
         $scheduling = Scheduling::with(
             [
@@ -81,7 +83,13 @@ class AdminController extends BaseController
                 'barber', 
                 'service'
             ])
-            ->findOrFail($id);
+            ->find($id);
+
+        if(!$scheduling){
+            return response()->json([
+                'error' => 'Data não encontrada.'
+            ], 404);
+        }                
 
         if ($scheduling->status !== 'scheduled') {
             return response()->json([
@@ -97,7 +105,7 @@ class AdminController extends BaseController
         ]);
     }
 
-    public function completeScheduling(Request $request, $id)
+    public function completeScheduling($id)
     {
         $scheduling = Scheduling::with(
             [
@@ -105,7 +113,13 @@ class AdminController extends BaseController
                 'barber', 
                 'service'
             ])
-            ->findOrFail($id);
+            ->find($id);
+
+        if(!$scheduling){
+            return response()->json([
+                'error' => 'Data não encontrada.'
+            ], 404);
+        }   
 
         if (!in_array($scheduling->status, ['scheduled', 'confirmed'])) {
             return response()->json([
@@ -128,7 +142,13 @@ class AdminController extends BaseController
         ]);
 
         $scheduling = Scheduling::with(['user', 'barber', 'service'])
-            ->findOrFail($id);
+            ->find($id);
+
+        if(!$scheduling){
+            return response()->json([
+                'error' => 'Data não encontrada.'
+            ], 404);
+        }
 
         if ($scheduling->status === 'completed') {
             return response()->json([
@@ -190,14 +210,16 @@ class AdminController extends BaseController
             'by_barber' => $schedulings->groupBy('barber.name')->map->count(),
         ];
 
-        return response()->json([
+        $report = [
             'period' => [
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date
             ],
             'statistics' => $stats,
             'schedulings' => $schedulings
-        ]);
+        ];
+
+        return response()->json($report);
     }
 
 }
