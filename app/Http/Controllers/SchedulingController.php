@@ -40,7 +40,7 @@ class SchedulingController extends BaseController{
 
     public function store(Request $request) 
     {   
-         $this->validate($request, [
+        $this->validate($request, [
             'barber_id' => 'required|exists:barbers,id',
             'service_id' => 'required|exists:services,id',
             'scheduling_date' => 'required|date|after_or_equal:today',
@@ -114,7 +114,7 @@ class SchedulingController extends BaseController{
 
         return response()->json([
             'message'=>'Agendamento Cadastrado',
-            'Agendamento' => $scheduling
+            'Agendamento' => $schedulingCreated
         ]);
     }
 

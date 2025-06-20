@@ -58,7 +58,7 @@ class Barber extends Model
     public function getYearsOfServiceAttribute(){
         return Carbon::parse($this->hire_date)->diffInYears(Carbon::now());
     }
-    ##
+    
     public function getAgeAttribute($value)
     {
         return $value;
