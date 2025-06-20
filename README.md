@@ -6,13 +6,12 @@
 ```bash
     composer install
 ```
-
 - Configura seu banco de dados e rode o create database. 
 - Crie o arquivo .env basedo no seu exemplo
 ``` .env
     #configure aqui    
     DB_CONNECTION=mysql
-    DB_HOST=192.168.56.57
+    DB_HOST=192.168.56.57   
     DB_PORT=3306
     DB_DATABASE=clickbeard_db
     DB_USERNAME=homestead
@@ -25,7 +24,7 @@
     php artisan migrate
 ```
 
--Caso queira pode rodar as seeder que populan o banco
+- Caso queira pode rodar as seeder que populan o banco
 ```bash
     php artisan db:seed
 ```
@@ -59,7 +58,7 @@ ec6f775c0e1270947013c5d2a912b5df062aa35d4d3e681b176fb81976579750
 ```bash
     php -S localhost:8000 -t ./public
 ```
-
+- Lembre-se de configurar o timezone da aplicação no .env, coloque ```America/Sao_Paulo```. 
 
 
 
