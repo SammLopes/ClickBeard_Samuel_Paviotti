@@ -2,11 +2,39 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
-
 $router->get('/', fn() => $router->app->version());
 
 $router->get('/routes', function() use ($router) {
     return response()->json($router->getRoutes());
+});
+
+$router->get('/docs', function (){
+    $appUrl = env('APP_URL');
+    $yamlUrl = url('/swagger.yaml');
+    
+    return <<<HTML
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>API Docs</title>
+        <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@4/swagger-ui.css">
+      </head>
+      <body>
+        <div id="swagger-ui"></div>
+        <script src="https://unpkg.com/swagger-ui-dist@4/swagger-ui-bundle.js"></script>
+        <script>
+          SwaggerUIBundle({
+            url: "$yamlUrl",
+            dom_id: "#swagger-ui",
+            presets: [
+              SwaggerUIBundle.presets.apis,
+              SwaggerUIBundle.SwaggerUIStandalonePreset
+            ]
+          });
+        </script>
+      </body>
+    </html>
+    HTML;
 });
 
 $router->get('barbers', 'BarberController@index');

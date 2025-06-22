@@ -1,0 +1,809 @@
+openapi: 3.0.0
+info:
+  title: API ClickBeard
+  description: >-
+    # Lumen PHP Framework - Clickbeard
+
+
+    # API Clickbeard - Como Executar
+
+
+    - Baixar as dependencias.
+        
+        ``` bash
+              composer install
+        
+         ```
+        
+    - Configura seu banco de dados e rode o create database.
+        
+    - Crie o arquivo .env basedo no seu exemplo
+        
+        ``` .env
+              #configure aqui    
+              DB_CONNECTION=mysql
+              DB_HOST=192.168.56.57   
+              DB_PORT=3306
+              DB_DATABASE=clickbeard_db
+              DB_USERNAME=homestead
+              DB_PASSWORD=secret
+              JWT_SECRET=
+        
+         ```
+        
+    - Execute as migrations
+        
+        ``` bash
+              php artisan migrate
+        
+         ```
+        
+    - Caso queira pode rodar as seeder que populan o banco
+        
+        ``` bash
+              php artisan db:seed
+        
+         ```
+        
+    - Ou rodar os dois de uma vez
+        
+        ``` bash
+              php artisan migrate --seed
+        
+         ```
+        
+    - Caso ja tenha usado pode recriar tudo e eceutar tudo denovo
+        
+        ``` bash
+              php artisan migrate:fresh --seed
+        
+         ```
+        
+    - Cria o JWT secret  
+        ##comando para crair o hash
+        
+    - pode ser criado de duas formas usando openssl ou php
+        
+    - OpenSSL, presente no terminal do Git bash
+        
+        ``` bash
+              openssl rand -hex 32
+        
+         ```
+        
+    - Com php dessa forma
+        
+        ``` bash
+              php -r "echo bin2hex(random_bytes(32)) . PHP_EOL;"
+        
+         ```
+        
+    - Ambos os comandos geran um hash como esse:
+        
+        ``` bash
+            ec6f775c0e1270947013c5d2a912b5df062aa35d4d3e681b176fb81976579750
+        
+         ```
+        
+    - Basta pegar esse hash e colocar no JWT_SECRET dentro do .env
+        
+    - Use o servidor embutido do php para executar a aplicação
+        
+        ``` bash
+              php -S localhost:8000 -t ./public
+        
+         ```
+        
+    - Lembre-se de configurar o timezone da aplicação no .env, coloque
+    `America/Sao_Paulo` na variável APP_TIMEZONE.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8001
+  - url: http://{{url}}
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+security:
+  - bearerAuth: []
+tags:
+  - name: Auth
+  - name: Auth > Admin
+  - name: Auth > Admin > Scheduling
+  - name: Auth > Admin > Barbers
+  - name: Auth > Admin > Speciality
+  - name: Auth > Admin > Services
+  - name: Auth > Sheduling
+  - name: Barbers
+  - name: Services
+  - name: Speciality
+paths:
+  /admin/scheduling/today:
+    get:
+      tags:
+        - Auth > Admin > Scheduling
+      summary: Scheduling Today
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /admin/scheduling/future:
+    get:
+      tags:
+        - Auth > Admin > Scheduling
+      summary: Scheduling  Future
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /admin/scheduling/date/2025-06-20:
+    get:
+      tags:
+        - Auth > Admin > Scheduling
+      summary: Scheduling By Date
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: ''
+          in: header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /admin/scheduling/9/confirm:
+    put:
+      tags:
+        - Auth > Admin > Scheduling
+      summary: Scheduling Confirm
+      requestBody:
+        content: {}
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /admin/scheduling/9/complete:
+    put:
+      tags:
+        - Auth > Admin > Scheduling
+      summary: Scheduling Complete
+      requestBody:
+        content: {}
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /admin/scheduling/6/cancel:
+    put:
+      tags:
+        - Auth > Admin > Scheduling
+      summary: Scheduling Cancel
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                reason: Compromisso ugente no outro dia
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /admin/barbers/:
+    post:
+      tags:
+        - Auth > Admin > Barbers
+      summary: Barber store
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: Carlos Ferreira
+                email: carlos.123ferreira@example.com
+                phone: (11) 98765-4321
+                age: 30
+                hire_date: '2020-06-15'
+                specialties:
+                  - specialty_id: 1
+                    experience_years: 5
+                    is_primary: true
+                  - specialty_id: 2
+                    experience_years: 2
+                    is_primary: false
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /admin/barbers/7:
+    put:
+      tags:
+        - Auth > Admin > Barbers
+      summary: Barber update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: Carlos F. Silva
+                email: carlos.silva@example.com
+                phone: (11) 91234-5678
+                age: 31
+                hire_date: '2020-06-15'
+                is_active: true
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /admin/barbers/2/specialties:
+    post:
+      tags:
+        - Auth > Admin > Barbers
+      summary: Store Specialties by Barber
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                specialty_id: 2
+                experience_years: 4
+                is_primary: true
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - Auth > Admin > Barbers
+      summary: Delete Specialties by Barber
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /admin/barbers-by-specialty:
+    get:
+      tags:
+        - Auth > Admin > Barbers
+      summary: barbers by Specialty
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: specialty_id
+          in: query
+          schema:
+            type: integer
+          example: '1'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /specialties:
+    post:
+      tags:
+        - Auth > Admin > Speciality
+      summary: Specialities Store
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: Corte Fade
+                description: Corte tradicional ou moderno para homens.
+                is_active: true
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - Speciality
+      summary: Specialites
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /specialties/10:
+    put:
+      tags:
+        - Auth > Admin > Speciality
+      summary: Specialties update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: Design de Sobrancelhas
+                description: Corte tradicional ou moderno para homens.
+                is_active: true
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - Speciality
+      summary: Specialities by id
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /specialties/9:
+    delete:
+      tags:
+        - Auth > Admin > Speciality
+      summary: Specialties delete
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /admin/services:
+    post:
+      tags:
+        - Auth > Admin > Services
+      summary: Services post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: Barba e Bigode Tradicional
+                description: Aparagem com navalha e finalização com toalha quente.
+                specialty_id: 2
+                price: 35
+                duration_minutes: 25
+                is_active: true
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /admin/services/8:
+    put:
+      tags:
+        - Auth > Admin > Services
+      summary: Services update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: Corte Tradicional
+                description: Aparagem com navalha.
+                specialty_id: 7
+                price: '35.00'
+                duration_minutes: 25
+                is_active: true
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - Auth > Admin > Services
+      summary: Service delete
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /scheduling:
+    get:
+      tags:
+        - Auth > Sheduling
+      summary: Scheduling
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - Auth > Sheduling
+      summary: Scheduling Store
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                barber_id: 1
+                service_id: 1
+                scheduling_date: '2025-06-21'
+                scheduling_time: '16:30'
+                notes: Quero um corte moderno
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /scheduling/1:
+    get:
+      tags:
+        - Auth > Sheduling
+      summary: Scheduling by Id
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    put:
+      tags:
+        - Auth > Sheduling
+      summary: Scheduling Update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                barber_id: 1
+                service_id: 1
+                scheduling_date: '2025-06-22'
+                scheduling_time: '11:00'
+                status: cancelled
+                notes: Quero um corte moderno
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: admin@barbearia.com
+                password: '1234'
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Register Client
+      description: >-
+        This is a POST request, submitting data to an API via the request body.
+        This request submits JSON data, and the data is reflected in the
+        response.
+
+
+        A successful POST request typically returns a `200 OK` or `201 Created`
+        response code.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: Samuel
+                email: samuel@tosko.com
+                password: '123456'
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /auth/me:
+    get:
+      tags:
+        - Auth
+      summary: me
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /auth/logout:
+    post:
+      tags:
+        - Auth
+      summary: Logout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example: ''
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /available-slots:
+    get:
+      tags:
+        - Auth
+      summary: Date Available
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: barber_id
+          in: query
+          schema:
+            type: integer
+          example: '1'
+        - name: date
+          in: query
+          schema:
+            type: string
+          example: '2025-06-20'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /barbers:
+    get:
+      tags:
+        - Barbers
+      summary: Barbers
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /barbers/2:
+    get:
+      tags:
+        - Barbers
+      summary: Barvers by id
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /barbers/specialty/2:
+    get:
+      tags:
+        - Barbers
+      summary: Barber by Specialty
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/9:
+    get:
+      tags:
+        - Services
+      summary: Services by id
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services:
+    get:
+      tags:
+        - Services
+      summary: Services
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
