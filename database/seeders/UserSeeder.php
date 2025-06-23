@@ -32,5 +32,23 @@ class UserSeeder extends Seeder
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
         ]);
+
+        User::create([
+                'name' => 'Cliente2',
+                'email' => 'cliente2@barbearia.com',
+                'password' => Hash::make('1234'), 
+                'role' => 'client',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+        ]);
+
+        User::create([
+                'name' => 'Cliente3',
+                'email' => 'cliente3@barbearia.com',
+                'password' => Hash::make('1234'), 
+                'role' => 'client',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+        ]);
     }
 }

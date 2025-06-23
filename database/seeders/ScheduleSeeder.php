@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Model\Scheduling;
+use App\Models\Scheduling;
 
 class ScheduleSeeder extends Seeder
 {
@@ -15,6 +15,7 @@ class ScheduleSeeder extends Seeder
     {
         $schedulings = [
             [
+                'user_id' => 2,
                 'barber_id' => 1,
                 'service_id' => 1,
                 'scheduling_date' => '2025-06-20',
@@ -22,6 +23,7 @@ class ScheduleSeeder extends Seeder
                 'notes' => 'Quero um corte moderno',
             ],
             [
+                'user_id' => 3,
                 'barber_id' => 2,
                 'service_id' => 1,
                 'scheduling_date' => '2025-06-21',
@@ -29,6 +31,7 @@ class ScheduleSeeder extends Seeder
                 'notes' => 'Fazer barba e corte baixo',
             ],
             [
+                'user_id' => 4,
                 'barber_id' => 3,
                 'service_id' => 2,
                 'scheduling_date' => '2025-06-22',
