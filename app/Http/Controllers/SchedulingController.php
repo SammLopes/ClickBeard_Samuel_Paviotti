@@ -174,7 +174,13 @@ class SchedulingController extends BaseController{
             'date' => 'required|date|after_or_equal:today'
         ]);
 
-        $barber = Barber::findOrFail($request->barber_id);
+        $barber = Barber::find($request->barber_id);
+
+        if( !$barber ) {
+            return response()->json([
+                'error' => 'Barbeiro selecionado não existe.'
+            ], 404);
+        }
 
         if(!$barber->is_active){
             return response()->json([

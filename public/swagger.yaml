@@ -593,7 +593,7 @@ paths:
       tags:
         - Auth > Sheduling
       summary: Scheduling by Id
-      description: Busca agednamento por id.
+      description: Busca agendamento por id.
       security:
         - bearerAuth: []
       parameters:
@@ -750,7 +750,7 @@ paths:
             schema:
               type: object
               example:
-                email: admin@barbearia.com
+                email: cliente@barbearia.com
                 password: '1234'
       parameters:
         - name: Content-Type
@@ -835,7 +835,7 @@ paths:
           description: Successful response
           content:
             application/json: {}
-  /available-slots/:
+  /available-slots:
     get:
       tags:
         - Auth
@@ -851,6 +851,16 @@ paths:
           schema:
             type: string
           example: application/json
+        - name: barber_id
+          in: query
+          schema:
+            type: integer
+          example: '1'
+        - name: date
+          in: query
+          schema:
+            type: string
+          example: '2025-06-23'
       responses:
         '200':
           description: Successful response
