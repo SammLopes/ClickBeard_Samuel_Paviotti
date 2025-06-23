@@ -69,5 +69,10 @@ ec6f775c0e1270947013c5d2a912b5df062aa35d4d3e681b176fb81976579750
 ```
 - Lembre-se de configurar o timezone da aplicação no .env, coloque ```America/Sao_Paulo```. 
 
+- A documentação dessa api esta na rota /docs, ou pode ser acessada via postam pela url abaixo:
+```
+https://www.postman.com/mission-geoscientist-80918247/api-workspace/collection/1nqe8l6/api-clickbeard?action=share&creator=33347873
+```
+
 
 
