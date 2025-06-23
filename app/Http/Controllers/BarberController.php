@@ -19,6 +19,7 @@ class BarberController extends BaseController
         
         $barbers = $query->get()->map(
             function($barber){
+
                 $primarySpecialty = $barber->primarySpecialty()->first();
                 return [
                     'id' => $barber->id,
@@ -46,7 +47,8 @@ class BarberController extends BaseController
             }
          );
 
-        return response()->json($barbers);
+
+        return response()->json($barbers, 200);
     }
 
     public function show($id)
@@ -163,7 +165,13 @@ class BarberController extends BaseController
             'is_primary' => 'boolean'
         ]);
 
-        $barber = Barber::findOrFail($id);
+        $barber = Barber::find($id);
+
+        if( !$barber ){
+            return response()->json([
+                'error' => 'Barbeiro não existe!'
+            ], 404);
+        }
 
         if ($barber->hasSpecialty($request->specialty_id)) {
             return response()->json([
@@ -201,13 +209,19 @@ class BarberController extends BaseController
 
         return response()->json([
             'message' => 'Especialidade removida com sucesso'
-        ]);
+        ], 200);
     }
 
     public function getBySpecialty($specialtyId)
     {
-        $specialty = Specialty::findOrFail($specialtyId);
+        $specialty = Specialty::find($specialtyId);
         
+        if( !$specialty ) {
+            return response()->json([
+                'error' => 'Especialidade não encontrada'
+            ], 404);
+        }
+
         $barbersBySpecialty = $specialty->barbers()
             ->where('is_active', true)
             ->orderByPivot('experience_years', 'desc')

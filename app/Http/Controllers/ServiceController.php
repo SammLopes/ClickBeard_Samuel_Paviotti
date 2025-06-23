@@ -16,7 +16,13 @@ class ServiceController extends BaseController
 
     public function show($id)
     {
-        $service = Service::findOrFail($id);
+        $service = Service::find($id);
+        if( !$service  ) {
+            return response()->json([
+                'error' => 'Serviço não encontrado'
+            ], 404);
+        }
+
         return response()->json($service);
     }
 
@@ -35,12 +41,7 @@ class ServiceController extends BaseController
         if ($request->specialty_id) {
 
             $specialty = Specialty::find($request->specialty_id);
-            
-            if(!$specialty){
-                return response()->json([
-                    'error' => 'Não encontrado a especialidade.'
-                ], 404);
-            }
+        
             if (!$specialty->is_active) {
                 return response()->json([
                     'error' => 'Não é possível associar o serviço a uma especialidade inativa.'
@@ -153,13 +154,19 @@ class ServiceController extends BaseController
         ]);
     }
 
-    public function getBySpecialty($specialtyId)
+    public function getServicesBySpecialty($id)
     {
-        // Verificar se a especialidade existe
-        $specialty = Specialty::findOrFail($specialtyId);
+
+        $specialty = Specialty::find($id);
+ 
+        if( !$specialty ) {
+            return response()->json([
+                'error' => 'Especialidade não encontrada'
+            ], 404);
+        }
 
         $services = Service::with('specialty')
-            ->where('specialty_id', $specialtyId)
+            ->where('specialty_id', $id)
             ->active()
             ->orderBy('name')
             ->get();

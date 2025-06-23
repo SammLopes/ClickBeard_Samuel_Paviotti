@@ -44,7 +44,14 @@ class SpecialtyController extends BaseController
             'services' => function($query) {
                 $query->active();
             }
-        ])->findOrFail($id);
+        ])->find($id);
+
+        
+        if (!$specialty){
+            return response()->json([
+                'error' => 'Especialidade não encontrada'
+            ], 404);
+        }
 
         return response()->json([
             'id' => $specialty->id,
@@ -95,7 +102,13 @@ class SpecialtyController extends BaseController
             return response()->json(['error' => 'Acesso negado'], 403);
         }
 
-        $specialty = Specialty::findOrFail($id);
+        $specialty = Specialty::find($id);
+        if( !$specialty ){
+            return response()->json([
+                'error' => 'Especialidade não encontrada.'
+            ], 404);   
+        }
+        
 
         $this->validate($request, [
             'name' => 'string|max:255|unique:specialties,name,' . $id,
@@ -118,9 +131,13 @@ class SpecialtyController extends BaseController
             return response()->json(['error' => 'Acesso negado'], 403);
         }
 
-        $specialty = Specialty::findOrFail($id);
+        $specialty = Specialty::find($id);
+        if( !$specialty ){
+            return response()->json([
+                'error' => 'Especialidade não encontrada.'
+            ], 404);   
+        }
         
-        // Verificar se há barbeiros ou serviços vinculados
         if ($specialty->barbers()->count() > 0 || $specialty->services()->count() > 0) {
             return response()->json([
                 'error' => 'Não é possível excluir especialidade com barbeiros ou serviços vinculados'

@@ -124,7 +124,12 @@ class SchedulingController extends BaseController{
         
         $scheduling = Scheduling::where('id', $id)
             ->where('user_id', $user->id)
-            ->firstOrFail();
+            ->first();
+        if(!$scheduling){
+            return response()->json([
+                'error' => 'Agendamento não encontrado.'
+            ], 404);
+        }
 
         if ($scheduling->status === 'completed') {
             return response()->json([
