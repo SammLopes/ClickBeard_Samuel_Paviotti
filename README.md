@@ -37,8 +37,7 @@
 ```bash
     php artisan migrate:fresh --seed
 ```
-- Cria o JWT secret
-##comando para crair o hash
+- Cria o JWT secret, comando para criar o hash
 - pode ser criado de duas formas usando openssl ou php
 - OpenSSL, presente no terminal do Git bash
 ```bash

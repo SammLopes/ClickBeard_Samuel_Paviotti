@@ -185,7 +185,7 @@ class SchedulingController extends BaseController{
         $date = $request->date;
 
         $availableSlots = [];
-        for ($hour = 9; $hour <= 18; $hour++) {
+        for ($hour = 8; $hour <= 18; $hour++) {
             if($hour != 12){
                 $time = sprintf('%02d:00', $hour);
                 $availableSlots[] = $time;
@@ -197,7 +197,7 @@ class SchedulingController extends BaseController{
             $cutoffTime = Carbon::now()->addHours(2);
             $availableSlots = array_filter($availableSlots, function($time) use ($cutoffTime){
                 $slotTime = Carbon::parse($time);
-                return $slotTime->greaterThan($cutoffTime());
+                return $slotTime->greaterThan($cutoffTime);
             });
         }
 
