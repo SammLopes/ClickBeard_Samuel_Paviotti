@@ -1,5 +1,15 @@
 # Lumen PHP Framework - Clickbeard
 
+# Dependencias usdadas no projeto
+```bash
+darkaonline/l5-swagger  2.1.3   
+fakerphp/faker          1.24.1  
+laravel/lumen-framework 10.0.4  
+mockery/mockery         1.6.12  
+phpunit/phpunit         10.5.46 
+tymon/jwt-auth          2.2.1   
+```
+
 # API  Clickbeard - Como Executar
 
 - Baixar as dependencias.
