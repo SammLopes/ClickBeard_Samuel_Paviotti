@@ -24,7 +24,7 @@
     php artisan migrate
 ```
 
-- Caso queira pode rodar as seeder que populan o banco
+- Caso queira pode rodar as seeder que vão popular o banco de dados.
 ```bash
     php artisan db:seed
 ```
@@ -33,7 +33,7 @@
 ```bash
     php artisan migrate --seed
 ```
-- Caso ja tenha usado pode recriar tudo e eceutar tudo denovo
+- Caso ja tenha usado o comando de migrate, pode recriar tudo e exeutar tudo denovo
 ```bash
     php artisan migrate:fresh --seed
 ```
@@ -56,7 +56,7 @@ ec6f775c0e1270947013c5d2a912b5df062aa35d4d3e681b176fb81976579750
 
 - Use o servidor embutido do php para executar a aplicação
 ```bash
-    php -S localhost:8000 -t ./public
+    php -S localhost:8001 -t ./public
 ```
 - Lembre-se de configurar o timezone da aplicação no .env, coloque ```America/Sao_Paulo```. 
 

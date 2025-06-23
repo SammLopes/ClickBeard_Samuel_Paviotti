@@ -11,7 +11,7 @@ info:
     - Baixar as dependencias.
         
         ``` bash
-              composer install
+            composer install
         
          ```
         
@@ -20,68 +20,68 @@ info:
     - Crie o arquivo .env basedo no seu exemplo
         
         ``` .env
-              #configure aqui    
-              DB_CONNECTION=mysql
-              DB_HOST=192.168.56.57   
-              DB_PORT=3306
-              DB_DATABASE=clickbeard_db
-              DB_USERNAME=homestead
-              DB_PASSWORD=secret
-              JWT_SECRET=
+            #configure aqui    
+            DB_CONNECTION=mysql
+            DB_HOST=192.168.56.57   
+            DB_PORT=3306
+            DB_DATABASE=clickbeard_db
+            DB_USERNAME=homestead
+            DB_PASSWORD=secret
+            JWT_SECRET=
         
          ```
         
     - Execute as migrations
         
         ``` bash
-              php artisan migrate
+            php artisan migrate
         
          ```
         
-    - Caso queira pode rodar as seeder que populan o banco
+    - Caso queira pode rodar as seeder que vão popular o banco de dados.
         
         ``` bash
-              php artisan db:seed
+            php artisan db:seed
         
          ```
         
     - Ou rodar os dois de uma vez
         
         ``` bash
-              php artisan migrate --seed
+            php artisan migrate --seed
         
          ```
         
-    - Caso ja tenha usado pode recriar tudo e eceutar tudo denovo
+    - Caso ja tenha usado o comando de migrate, pode recriar tudo e exeutar tudo
+    denovo
         
         ``` bash
-              php artisan migrate:fresh --seed
+            php artisan migrate:fresh --seed
         
          ```
         
-    - Cria o JWT secret  
-        ##comando para crair o hash
+    - Cria o JWT SECRET, comando para criar o hash:
         
-    - pode ser criado de duas formas usando openssl ou php
+    - Pode ser criado de duas formas usando openssl ou php
         
     - OpenSSL, presente no terminal do Git bash
         
         ``` bash
-              openssl rand -hex 32
+            openssl rand -hex 32
         
          ```
         
     - Com php dessa forma
         
         ``` bash
-              php -r "echo bin2hex(random_bytes(32)) . PHP_EOL;"
+            php -r "echo bin2hex(random_bytes(32)) . PHP_EOL;"
         
          ```
         
     - Ambos os comandos geran um hash como esse:
         
         ``` bash
-            ec6f775c0e1270947013c5d2a912b5df062aa35d4d3e681b176fb81976579750
+          ec6f775c0e1270947013c5d2a912b5df062aa35d4d3e681b176fb81976579750
         
          ```
         
@@ -90,40 +90,63 @@ info:
     - Use o servidor embutido do php para executar a aplicação
         
         ``` bash
-              php -S localhost:8000 -t ./public
+            php -S localhost:8001 -t ./public
         
          ```
         
     - Lembre-se de configurar o timezone da aplicação no .env, coloque
-    `America/Sao_Paulo` na variável APP_TIMEZONE.
+    `America/Sao_Paulo`.
   version: 1.0.0
 servers:
-  - url: http://localhost:8001
   - url: http://{{url}}
+  - url: http://localhost:8001
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
+    noauthAuth:
+      type: http
+      scheme: noauth
 security:
   - bearerAuth: []
 tags:
   - name: Auth
+    description: >-
+      São rotas protegidas, requetem autenticação JWT, qualquer rota fora dessa
+      seção de Auth são rotas públicas.
   - name: Auth > Admin
+    description: >-
+      Seção de admin, qualquer rota que estiver dentro desta seção é
+      funcionalidade de admin.
   - name: Auth > Admin > Scheduling
+    description: Seção de agendamento manipulda somente pleo admin.
   - name: Auth > Admin > Barbers
+    description: >-
+      Rota autenticada de cadastro de barbeiros, somente o admin pode ter acesso
+      a essas funcionaliades.
   - name: Auth > Admin > Speciality
+    description: >-
+      Pasta relacionado a entidade especialidade voltadas para os
+      administradores
   - name: Auth > Admin > Services
+    description: >-
+      Seção voltada para entidade de serviços, essas rotas são permitidas
+      somente para os admins.
   - name: Auth > Sheduling
   - name: Barbers
+    description: Seção de rotas públicas dos barbeiros.
   - name: Services
+    description: Rota da entidade de serviçoes públicas.
   - name: Speciality
+    description: Seção onde fica as rotas públicas da entidade de especialidades.
 paths:
   /admin/scheduling/today:
     get:
       tags:
         - Auth > Admin > Scheduling
       summary: Scheduling Today
+      description: Busca todos os agendamentos no dia corrente.
       security:
         - bearerAuth: []
       responses:
@@ -136,6 +159,7 @@ paths:
       tags:
         - Auth > Admin > Scheduling
       summary: Scheduling  Future
+      description: Busca todos os agendamentos futuros.
       security:
         - bearerAuth: []
       responses:
@@ -143,11 +167,12 @@ paths:
           description: Successful response
           content:
             application/json: {}
-  /admin/scheduling/date/2025-06-20:
+  /admin/scheduling/date/{date}:
     get:
       tags:
         - Auth > Admin > Scheduling
       summary: Scheduling By Date
+      description: Busca agendamento por data.
       security:
         - bearerAuth: []
       parameters:
@@ -155,53 +180,12 @@ paths:
           in: header
           schema:
             type: string
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-  /admin/scheduling/9/confirm:
-    put:
-      tags:
-        - Auth > Admin > Scheduling
-      summary: Scheduling Confirm
-      requestBody:
-        content: {}
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-  /admin/scheduling/9/complete:
-    put:
-      tags:
-        - Auth > Admin > Scheduling
-      summary: Scheduling Complete
-      requestBody:
-        content: {}
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-  /admin/scheduling/6/cancel:
-    put:
-      tags:
-        - Auth > Admin > Scheduling
-      summary: Scheduling Cancel
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              example:
-                reason: Compromisso ugente no outro dia
-      security:
-        - bearerAuth: []
+        - name: date
+          in: path
+          schema:
+            type: string
+          required: true
+          example: '2025-06-20'
       responses:
         '200':
           description: Successful response
@@ -212,6 +196,7 @@ paths:
       tags:
         - Auth > Admin > Barbers
       summary: Barber store
+      description: Realiza a criação d eum registro de um barbeito.
       requestBody:
         content:
           application/json:
@@ -243,11 +228,12 @@ paths:
           description: Successful response
           content:
             application/json: {}
-  /admin/barbers/7:
+  /admin/barbers/{id}:
     put:
       tags:
         - Auth > Admin > Barbers
       summary: Barber update
+      description: Realiza a atualização de algum registro do barbeiro.
       requestBody:
         content:
           application/json:
@@ -268,16 +254,25 @@ paths:
           schema:
             type: string
           example: application/json
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '7'
       responses:
         '200':
           description: Successful response
           content:
             application/json: {}
-  /admin/barbers/2/specialties:
+  /admin/barbers/{id}/specialties:
     post:
       tags:
         - Auth > Admin > Barbers
       summary: Store Specialties by Barber
+      description: >-
+        Rota responsável pela adição de uma especialidade a um barbeiro dado o
+        id do dele e o id da especialidade.
       requestBody:
         content:
           application/json:
@@ -295,6 +290,13 @@ paths:
           schema:
             type: string
           example: application/json
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          description: Id do barbeiro
+          example: '2'
       responses:
         '200':
           description: Successful response
@@ -304,6 +306,9 @@ paths:
       tags:
         - Auth > Admin > Barbers
       summary: Delete Specialties by Barber
+      description: >-
+        Rota para remoção de uma espcialidade dado o id do barbeiro e o id da
+        especialidade.
       security:
         - bearerAuth: []
       parameters:
@@ -312,39 +317,24 @@ paths:
           schema:
             type: string
           example: application/json
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-  /admin/barbers-by-specialty:
-    get:
-      tags:
-        - Auth > Admin > Barbers
-      summary: barbers by Specialty
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          example: application/json
-        - name: specialty_id
-          in: query
+        - name: id
+          in: path
           schema:
             type: integer
-          example: '1'
+          required: true
+          description: Id do barbeiro
+          example: '2'
       responses:
         '200':
           description: Successful response
           content:
             application/json: {}
-  /specialties:
+  /admin/specialties:
     post:
       tags:
         - Auth > Admin > Speciality
       summary: Specialities Store
+      description: Realiza o registro uma espcialidade.
       requestBody:
         content:
           application/json:
@@ -367,28 +357,12 @@ paths:
           description: Successful response
           content:
             application/json: {}
-    get:
-      tags:
-        - Speciality
-      summary: Specialites
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          example: application/json
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-  /specialties/10:
+  /admin/specialties/{id}:
     put:
       tags:
         - Auth > Admin > Speciality
       summary: Specialties update
+      description: Realiza a atualização de uma especialidade dado seu id.
       requestBody:
         content:
           application/json:
@@ -406,31 +380,29 @@ paths:
           schema:
             type: string
           example: application/json
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-    get:
-      tags:
-        - Speciality
-      summary: Specialities by id
-      parameters:
-        - name: Content-Type
-          in: header
+        - name: id
+          in: path
           schema:
-            type: string
-          example: application/json
+            type: integer
+          required: true
+          example: '10'
       responses:
         '200':
           description: Successful response
           content:
             application/json: {}
-  /specialties/9:
     delete:
       tags:
         - Auth > Admin > Speciality
       summary: Specialties delete
+      description: |-
+        Rota para deletar uma especialidade.
+
+        Regras:
+
+        - Não se pode deletar uma especialidade vinculada a um barbeiro.
+            
+        - Não se pode deletar um especialidade vinculado a um serviço.
       security:
         - bearerAuth: []
       parameters:
@@ -438,7 +410,13 @@ paths:
           in: header
           schema:
             type: string
-          example: application/json
+          example: application/x-www-form-urlencoded
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '9'
       responses:
         '200':
           description: Successful response
@@ -449,6 +427,17 @@ paths:
       tags:
         - Auth > Admin > Services
       summary: Services post
+      description: >-
+        Rota para adicionar o registro de um serviço associado a uma
+        especialidade.
+
+
+        Regras:
+
+
+        - Para registrar um serviço a especialidade tem que existir.
+            
+        - Para registrar um serviço a especialidade precisa estar ativa.
       requestBody:
         content:
           application/json:
@@ -474,11 +463,21 @@ paths:
           description: Successful response
           content:
             application/json: {}
-  /admin/services/8:
+  /admin/services/{id}:
     put:
       tags:
         - Auth > Admin > Services
       summary: Services update
+      description: |-
+        Rota usada para altear um registro de um serviço dado seu id.
+
+        Regras:
+
+        - Para registrar um serviço a especialidade tem que existir.
+            
+        - Para registrar um serviço a especialidade precisa estar ativa.
+            
+        - Não é possivel desativar um serviço com com agendamentos futuros.
       requestBody:
         content:
           application/json:
@@ -499,6 +498,13 @@ paths:
           schema:
             type: string
           example: application/json
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          description: Id do serviço
+          example: '8'
       responses:
         '200':
           description: Successful response
@@ -508,6 +514,15 @@ paths:
       tags:
         - Auth > Admin > Services
       summary: Service delete
+      description: >-
+        Rota para deletar um servoço resgitrados dado seu id.
+
+
+        Regras:
+
+
+        - Pode deletar um serviço caso nçao tenha nenhum agendamento relacionado
+        a o serviço.
       security:
         - bearerAuth: []
       parameters:
@@ -516,6 +531,12 @@ paths:
           schema:
             type: string
           example: application/json
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '8'
       responses:
         '200':
           description: Successful response
@@ -567,11 +588,12 @@ paths:
           description: Successful response
           content:
             application/json: {}
-  /scheduling/1:
+  /scheduling/{id}:
     get:
       tags:
         - Auth > Sheduling
       summary: Scheduling by Id
+      description: Busca agednamento por id.
       security:
         - bearerAuth: []
       parameters:
@@ -580,6 +602,12 @@ paths:
           schema:
             type: string
           example: application/json
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '1'
       responses:
         '200':
           description: Successful response
@@ -589,6 +617,7 @@ paths:
       tags:
         - Auth > Sheduling
       summary: Scheduling Update
+      description: Realiza a alterações do registro de um agenamento.
       requestBody:
         content:
           application/json:
@@ -603,6 +632,105 @@ paths:
                 notes: Quero um corte moderno
       security:
         - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          description: Id do agendamento
+          example: '1'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /scheduling/{id}/confirm:
+    put:
+      tags:
+        - Auth > Sheduling
+      summary: Scheduling Confirm
+      description: |-
+        Alterar um agendamento para confirmado.
+
+        Regras:
+
+        - Apenas agendamentos marcados com scheduled podem ser confirmados.
+      requestBody:
+        content: {}
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '9'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /scheduling/{id}/cancel:
+    put:
+      tags:
+        - Auth > Sheduling
+      summary: Scheduling Cancel
+      description: >-
+        Alterar um agendamento para cancelado. Pode colocar uma motivo para o
+        cancelamento, sendo opcional.
+
+
+        Regras:
+
+
+        - Não é possivel cancelar um agendamento já cancelado.
+            
+        - Não é possivel cancelar um agendamento ja completo.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                reason: Compromisso ugente no outro dia
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '6'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /scheduling/{id}/complete:
+    put:
+      tags:
+        - Auth > Sheduling
+      summary: Scheduling Complete
+      description: |-
+        Altera um agendamento para concluido.
+
+        Regras:
+
+        - Não é possivel marcar como completo agendamentos que estão cancelados.
+      requestBody:
+        content: {}
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '9'
       responses:
         '200':
           description: Successful response
@@ -613,6 +741,9 @@ paths:
       tags:
         - Auth
       summary: Login
+      description: >-
+        Realiza o login da plataforma retornando informações do cliente
+        cadastrado e o token para o cliente.
       requestBody:
         content:
           application/json:
@@ -637,14 +768,7 @@ paths:
       tags:
         - Auth
       summary: Register Client
-      description: >-
-        This is a POST request, submitting data to an API via the request body.
-        This request submits JSON data, and the data is reflected in the
-        response.
-
-
-        A successful POST request typically returns a `200 OK` or `201 Created`
-        response code.
+      description: Realiza o resgistro de um cliente
       requestBody:
         content:
           application/json:
@@ -654,6 +778,8 @@ paths:
                 name: Samuel
                 email: samuel@tosko.com
                 password: '123456'
+      security:
+        - noauthAuth: []
       parameters:
         - name: Content-Type
           in: header
@@ -670,6 +796,7 @@ paths:
       tags:
         - Auth
       summary: me
+      description: Essa rota retorna o usário logado.
       security:
         - bearerAuth: []
       parameters:
@@ -688,6 +815,7 @@ paths:
       tags:
         - Auth
       summary: Logout
+      description: Rota que realiza o logout do usuário.
       requestBody:
         content:
           application/json:
@@ -707,11 +835,14 @@ paths:
           description: Successful response
           content:
             application/json: {}
-  /available-slots:
+  /available-slots/:
     get:
       tags:
         - Auth
       summary: Date Available
+      description: >-
+        Buscas datas liberadas para relaizar o agendamento. Dado como parametros
+        o id do barbeiro e a data ele verifica se tem horários livres.
       security:
         - bearerAuth: []
       parameters:
@@ -720,16 +851,30 @@ paths:
           schema:
             type: string
           example: application/json
-        - name: barber_id
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /barbers-by-specialty:
+    get:
+      tags:
+        - Auth
+      summary: barbers by Specialty
+      description: Busca de babrbeiros por especialidade.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: specialty_id
           in: query
           schema:
             type: integer
           example: '1'
-        - name: date
-          in: query
-          schema:
-            type: string
-          example: '2025-06-20'
       responses:
         '200':
           description: Successful response
@@ -740,52 +885,77 @@ paths:
       tags:
         - Barbers
       summary: Barbers
+      description: Busca uma lista de barbeiros cadastrados.
+      security:
+        - noauthAuth: []
       responses:
         '200':
           description: Successful response
           content:
             application/json: {}
-  /barbers/2:
+  /barbers/{id}:
     get:
       tags:
         - Barbers
-      summary: Barvers by id
+      summary: Barbers by id
+      description: Busca de barbeiros por id.
+      security:
+        - noauthAuth: []
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '2'
       responses:
         '200':
           description: Successful response
           content:
             application/json: {}
-  /barbers/specialty/2:
+  /barbers/specialty/{id}:
     get:
       tags:
         - Barbers
       summary: Barber by Specialty
+      description: >-
+        Busca barbeiros por especialidade. Dado o id da especialidade ele
+        retorna uma lista de barbeiros.
       security:
-        - bearerAuth: []
+        - noauthAuth: []
       parameters:
-        - name: Content-Type
-          in: header
+        - name: id
+          in: path
           schema:
-            type: string
-          example: application/json
+            type: integer
+          required: true
+          description: Id da especialidade.
+          example: '5'
       responses:
         '200':
           description: Successful response
           content:
             application/json: {}
-  /services/9:
+  /services/{id}:
     get:
       tags:
         - Services
       summary: Services by id
+      description: Busca de serviçoes por id.
       security:
-        - bearerAuth: []
+        - noauthAuth: []
       parameters:
         - name: Content-Type
           in: header
           schema:
             type: string
           example: application/json
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '1'
       responses:
         '200':
           description: Successful response
@@ -796,6 +966,63 @@ paths:
       tags:
         - Services
       summary: Services
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /services/specialty/{id}:
+    get:
+      tags:
+        - Services
+      summary: Services by Specialty
+      description: Busca de serviços por especialidade, dado o id dessa especialidade.
+      security:
+        - noauthAuth: []
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          description: Id especialidade
+          example: '1'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /specialties:
+    get:
+      tags:
+        - Speciality
+      summary: Specialites
+      description: Rota que lista todos os serviçoes cadastrados.
+      security:
+        - noauthAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /specialties/10:
+    get:
+      tags:
+        - Speciality
+      summary: Specialities by id
+      description: Busca por id uma especialidadade específica.
       parameters:
         - name: Content-Type
           in: header

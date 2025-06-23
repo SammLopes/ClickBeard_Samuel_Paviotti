@@ -43,6 +43,7 @@ $router->get('barbers/specialty/{specialtyId}', 'BarberController@getBySpecialty
 
 $router->get('services', 'ServiceController@index');
 $router->get('services/{id}', 'ServiceController@show');
+$router->get('services/specialty/{id}', 'ServiceController@getServicesBySpecialty');
 
 $router->get('specialties', 'SpecialtyController@index');
 $router->get('specialties/{id}', 'SpecialtyController@show');
@@ -66,15 +67,15 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->get('available-slots', 'SchedulingController@availableSlots');
     $router->get('barbers-by-specialty', 'SchedulingController@getBarbersBySpecialty');
 
-    $router->group(['prefix' => 'admin', 'middelware'=>'admin'], function () use ($router) {
+    $router->put('scheduling/{id}/confirm', 'AdminController@confirmScheduling');
+    $router->put('scheduling/{id}/complete', 'AdminController@completeScheduling');
+    $router->put('scheduling/{id}/cancel', 'AdminController@cancelScheduling');
+
+    $router->group(['prefix' => 'admin', 'middleware'=>'admin'], function () use ($router) {
 
         $router->get('scheduling/today', 'AdminController@todayScheduling');
         $router->get('scheduling/future', 'AdminController@futureScheduling');
         $router->get('scheduling/date/{date}', 'AdminController@schedulingByDate');
-
-        $router->put('scheduling/{id}/confirm', 'AdminController@confirmScheduling');
-        $router->put('scheduling/{id}/complete', 'AdminController@completeScheduling');
-        $router->put('scheduling/{id}/cancel', 'AdminController@cancelScheduling');
 
         $router->post('barbers', 'BarberController@store'); 
         $router->put('barbers/{id}', 'BarberController@update');
@@ -88,5 +89,6 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
         $router->post('services', 'ServiceController@store');
         $router->put('services/{id}', 'ServiceController@update');
         $router->delete('services/{id}', 'ServiceController@destroy');
+        
     });
 });
